@@ -8,15 +8,15 @@ resource "aws_db_subnet_group" "dbsubnet" {
 
 # Create RDS Instance
 resource "aws_db_instance" "dbinstance" {
-  allocated_storage      = 5
-  engine                 = "mysql"
-  engine_version         = "8.0"
-  instance_class         = "db.t3.micro"
-  identifier             = "dbinstance"
-  db_name                = "employees"
-  username               = var.rds_username
-  password               = var.rds_password
+  allocated_storage      = var.settings.database_instance.allocated_storage
+  engine                 = var.settings.database_instance.engine
+  engine_version         = var.settings.database_instance.engine_version
+  instance_class         = var.settings.database_instance.instance_class
+  identifier             = var.settings.database_instance.identifier
+  db_name                = var.settings.database_instance.db_name
+  username               = var.settings.database_instance.username
+  password               = var.settings.database_instance.password
   db_subnet_group_name   = aws_db_subnet_group.dbsubnet.id
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
-  skip_final_snapshot    = true
+  skip_final_snapshot    = var.settings.database_instance.skip_final_snapshot
 }

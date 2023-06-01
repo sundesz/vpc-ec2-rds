@@ -12,7 +12,6 @@ echo "<html><h1>Ma hu Sandesh Hyoju! $(hostname -f)</h1></html>" > /var/www/html
 
 sudo yum install git -y
 
-
 cd /home/ec2-user
 su ec2-user -c "git clone https://github.com/monir-uz-zaman/aws_frontend.git"
 

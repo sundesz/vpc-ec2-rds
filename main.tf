@@ -11,12 +11,3 @@
 
 # vpc enabble dnshostname
 # subnet Enable auto-assign public IPv4 address
-
-# -var-file="dev.tfvars"
-
-# https://www.youtube.com/watch?v=iRaai1IBlB0
-# Learn Terraform (and AWS) by Building a Dev Environment – Full Course for Beginners
-
-
-# https://medium.com/nerd-for-tech/two-tier-architecture-deployment-with-terraform-14252c938736
-# https://aws.plainenglish.io/terraform-with-ec2-instances-a7e31571a058

@@ -1,4 +1,4 @@
-# Terraform AWS 3Tier App with Bastion Host (check the development branch for right code)
+# Terraform AWS 3Tier App with Bastion Host
 
 This repository contains Terraform code to provision the resources needed to deploy a three-tier application on AWS. The architecture includes a bastion host, web server, application server, and an RDS database. You can find the code and resources at the following GitHub repository: [https://github.com/sundesz/vpc-ec2-rds](https://github.com/sundesz/vpc-ec2-rds).
 

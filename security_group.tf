@@ -1,18 +1,39 @@
-resource "aws_security_group" "web_sg" {
-  name        = "allow_web_traffic"
-  description = "Allow Web inbound traffic"
+# Bastion host security group
+resource "aws_security_group" "bastion_host_sg" {
+  name        = "Bastion host sg"
+  description = "Allow SSH access to bastion host"
   vpc_id      = aws_vpc.my-vpc.id
 
   ingress {
-    description = "HTTPS from VPC"
-    from_port   = 443
-    to_port     = 443
+    description = "SSH from VPC"
+    from_port   = 22
+    to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "bastion_host_sg"
+  }
+}
+
+
+# Webserver and app server security group
+resource "aws_security_group" "web_sg" {
+  name        = "WebApp-sg"
+  description = "Allow Web inbound traffic to web and app server"
+  vpc_id      = aws_vpc.my-vpc.id
+
   ingress {
-    description = "HTTP from VPC"
+    description = "Allow HTTP"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -20,53 +41,27 @@ resource "aws_security_group" "web_sg" {
   }
 
   ingress {
-    description = "SSH from VPC"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    description     = "SSH from VPC"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion_host_sg.id]
   }
 
   ingress {
-    description = "3000 from VPC"
+    description = "Allow 3000 port"
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  tags = {
-    Name = "allow-public-web"
-  }
-}
-
-resource "aws_security_group" "application_sg" {
-  name        = "allow_traffic_application"
-  description = "Allow Application inbound traffic"
-  vpc_id      = aws_vpc.my-vpc.id
-
   ingress {
-    description = "SSH from VPC"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    security_groups = [aws_security_group.web_sg.id]
-  }
-
-  ingress {
-    description = "8080 from VPC"
+    description = "Allow 8080 port"
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    security_groups = [aws_security_group.web_sg.id]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -78,7 +73,7 @@ resource "aws_security_group" "application_sg" {
   }
 
   tags = {
-    Name = "application-server"
+    Name = "web-app-sg"
   }
 }
 
@@ -94,14 +89,14 @@ resource "aws_security_group" "rds_sg" {
     to_port         = 3306
     protocol        = "tcp"
     cidr_blocks     = [var.vpc_cidr]
-    security_groups = [aws_security_group.application_sg.id]
+    security_groups = [aws_security_group.web_sg.id]
   }
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    security_groups = [aws_security_group.web_sg.id]
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion_host_sg.id]
   }
 
   egress {
@@ -113,6 +108,6 @@ resource "aws_security_group" "rds_sg" {
   }
 
   tags = {
-    Name = "allow-rds"
+    Name = "rds-sg"
   }
 }

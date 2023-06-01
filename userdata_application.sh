@@ -19,23 +19,14 @@ sudo systemctl start mysqld
 
 
 cd /home/ec2-user
-# wget https://www.dropbox.com/s/pm16ekcoy700nmy/aws-backend-project.zip
-# unzip aws-backend-project.zip
-# mv aws-backend-project aws_backend
-
-su ec2-user -c "git clone https://github.com/MahnoorFatima02/AWS-Project-Backend.git"
-mv AWS-Project-Backend aws_backend
-
-cd /home/ec2-user
 echo "[mysql]
 user=${db_user_name}
 password=${db_user_password}
 host=${db_host_name}" > .my.cnf
 
-
-
-cd /home/ec2-user
+su ec2-user -c "git clone https://github.com/MahnoorFatima02/AWS-Project-Backend.git"
 su ec2-user -c "git clone https://github.com/datacharmer/test_db.git"
+mv AWS-Project-Backend aws_backend
 
 cd /home/ec2-user/test_db
 
@@ -53,7 +44,6 @@ echo "CREATE TABLE employees.users (
 INSERT INTO employees.users(emp_no, role, password) values(110183, 'manager', 'testpassword1');
 INSERT INTO employees.users(emp_no, role, password) values(110022, 'manager', 'testpassword');
 INSERT INTO employees.users(emp_no, role, password) values(10002, 'staff', 'testpassword1');
-#ALTER USER 'root'@'localhost' IDENTIFIED BY 'Pa$$w0rd@1234';
 " > users.sql
 
 sudo mysql --host="${db_host_name}" --user=main --password="lab-password" < employees.sql

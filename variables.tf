@@ -7,16 +7,17 @@ variable "vpc_cidr" {
   default = "192.168.0.0/16"
 }
 
-variable "subnet_cidr" {
-  default = ["192.168.1.0/24", "192.168.2.0/24", "192.168.11.0/24", "192.168.12.0/24"]
-  type    = list(string)
-}
-variable "private_cidrs" {
-  default = []
+variable "public_cidrs" {
+  default = ["192.168.1.0/24", "192.168.2.0/24"]
   type    = list(string)
 }
 
-variable "availability_zone" {
+variable "private_cidrs" {
+  default = ["192.168.51.0/24", "192.168.52.0/24"]
+  type    = list(string)
+}
+
+variable "availability_zones" {
   default = ["eu-north-1a", "eu-north-1b"]
   type    = list(string)
 }
@@ -61,7 +62,7 @@ variable "settings" {
       instance_type = "t3.micro"
     }
     app_server = {
-      name          = "Database server"
+      name          = "Application server"
       instance_type = "t3.micro"
     }
     database_instance = {

@@ -34,15 +34,9 @@ To get started with provisioning the three-tier app with a bastion host, follow 
 
    Provide your AWS Access Key ID, AWS Secret Access Key, default region name, and output format when prompted. These credentials will be used by Terraform to authenticate with AWS.
 
-4. Change the file permission of the key pair file:
+4. Open the `variables.tf` file and review the variables. Adjust them according to your requirements, such as AWS region, instance types, database settings, etc.
 
-   ```bash
-   chmod 400 aws_test_key.pem
-   ```
-
-5. Open the `variables.tf` file and review the variables. Adjust them according to your requirements, such as AWS region, instance types, database settings, etc.
-
-6. Run Terraform to create the infrastructure:
+5. Run Terraform to create the infrastructure:
 
    ```bash
    terraform init
@@ -51,25 +45,24 @@ To get started with provisioning the three-tier app with a bastion host, follow 
 
    Review the plan and enter `yes` to proceed with the resource creation.
 
-7. Terraform will provision the following resources in AWS:
+6. Terraform will provision the following resources in AWS:
 
    - Bastion host (EC2 instance) in a public subnet
    - Web server (EC2 instance) in a public subnet
    - Application server (EC2 instance) in a public subnet
    - RDS database instance in a private subnet
 
-8. Once the Terraform run is complete, the public IP addresses of the bastion host, web server, and application server will be displayed in the console output.
+7. Once the Terraform run is complete, the public IP addresses of the bastion host, web server, and application server will be displayed in the console output.
 
-9. To connect to the bastion host using SSH, use the following command:
+8. To connect to the bastion host using SSH, use the following command:
 
    ```bash
-   chmod 400 aws_test_key.pem
    ssh -i aws_test_key.pem ec2-user@<bastion-public-ip>
    ```
 
    The private key file `aws_test_key.pem` for SSH access to the bastion host is automatically generated during the Terraform run.
 
-10. From the bastion host, you can SSH into the web server and application server using their public IP addresses.
+9. From the bastion host, you can SSH into the web server and application server using their private IP addresses.
 
 ## Accessing the RDS Database
 

@@ -6,13 +6,6 @@ resource "aws_instance" "bastion_host" {
   associate_public_ip_address = true
   subnet_id                   = var.public_subnet_1a
   security_groups             = [var.bastion_sg]
-  user_data                   = <<EOF
-
-
-
-
-
-  EOF
 
   connection {
     type        = "ssh"

@@ -41,7 +41,7 @@ resource "aws_instance" "web_server" {
   security_groups             = [var.web_sg]
 
   user_data_base64 = base64encode("${templatefile("${path.module}/userdata/web.sh", {
-    app-server-public-dns = aws_instance.application_server.public_ip
+    app-server-public-dns = aws_instance.application_server.private_ip
   })}")
 
   tags = {
@@ -54,12 +54,12 @@ resource "aws_instance" "web_server" {
 
 # Application server
 resource "aws_instance" "application_server" {
-  ami                         = data.aws_ami.amazon_linux_2.id
-  instance_type               = var.settings.app_server.instance_type
-  key_name                    = aws_key_pair.key_pair.key_name
-  associate_public_ip_address = true
-  subnet_id                   = var.public_subnet_1a
-  security_groups             = [var.web_sg]
+  ami           = data.aws_ami.amazon_linux_2.id
+  instance_type = var.settings.app_server.instance_type
+  key_name      = aws_key_pair.key_pair.key_name
+  # associate_public_ip_address = true
+  subnet_id       = var.private_subnet_1a
+  security_groups = [var.app_sg]
 
   user_data_base64 = base64encode("${templatefile("${path.module}/userdata/application.sh", {
     db_host_name     = var.dbEndpoint,

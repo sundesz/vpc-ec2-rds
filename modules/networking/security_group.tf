@@ -25,7 +25,6 @@ resource "aws_security_group" "bastion_host_sg" {
   }
 }
 
-
 # Webserver server security group
 resource "aws_security_group" "web_sg" {
   name        = "Web server sg"
@@ -52,14 +51,6 @@ resource "aws_security_group" "web_sg" {
     description = "Allow 3000 port"
     from_port   = 3000
     to_port     = 3000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "Allow 8080 port"
-    from_port   = 8080
-    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -111,7 +102,6 @@ resource "aws_security_group" "app_sg" {
     Name = "app-server-sg"
   }
 }
-
 
 # RDS security group
 resource "aws_security_group" "rds_sg" {

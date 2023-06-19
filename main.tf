@@ -34,11 +34,13 @@ module "database" {
 }
 
 module "compute" {
-  source           = "./modules/compute"
-  db_instance      = module.database.db_instance
-  dbEndpoint       = module.database.dbEndpoint
-  public_subnet_1a = module.networking.public_subnet_1a
-  bastion_sg       = module.networking.bastion_sg
-  web_sg           = module.networking.web_sg
-  settings         = var.settings
+  source            = "./modules/compute"
+  db_instance       = module.database.db_instance
+  dbEndpoint        = module.database.dbEndpoint
+  public_subnet_1a  = module.networking.public_subnet_1a
+  private_subnet_1a = module.networking.private_subnet_1a
+  bastion_sg        = module.networking.bastion_sg
+  web_sg            = module.networking.web_sg
+  app_sg            = module.networking.app_sg
+  settings          = var.settings
 }
